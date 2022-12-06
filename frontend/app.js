@@ -1,5 +1,7 @@
 var express = require('express');
-const dotenv = require('dotenv').config();
+require('dotenv').config()
+
+console.log(process.env.API_KEY);
 
 
 var app = express();
@@ -8,8 +10,8 @@ var server = app.listen(4000, () => { //Start the server, listening on port 4000
     console.log("Listening to requests on port 4000...");
 })
 
-app.get('/', (req, res) => {
-    res.send()
+app.get('/', function(req, res) {
+    res.sendFile('index.html', { root: 'public'});
 })
 
 var io = require('socket.io')(server); //Bind socket.io to our express server.
