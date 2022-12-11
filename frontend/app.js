@@ -1,40 +1,41 @@
-var express = require('express');
-require('dotenv').config()
+var http = require('http');
+var fs = require('fs');
+var index = fs.readFileSync( 'index.html');
 
-console.log(process.env.API_KEY);
+var SerialPort = require('serialport');
+const parsers = SerialPort.parsers;
 
-
-var app = express();
-
-var server = app.listen(4000, () => { //Start the server, listening on port 4000.
-    console.log("Listening to requests on port 4000...");
-})
-
-app.get('/', function(req, res) {
-    res.sendFile('index.html', { root: 'public'});
-})
-
-var io = require('socket.io')(server); //Bind socket.io to our express server.
-
-app.use(express.static('public')); //Send index.html page on GET /
-
-/*
-const SerialPort = require('serialport'); 
-const Readline = SerialPort.parsers.Readline;
-const port = new SerialPort('COM3'); //Connect serial port to port COM3. Because my Arduino Board is connected on port COM3. See yours on Arduino IDE -> Tools -> Port
-const parser = port.pipe(new Readline({delimiter: '\r\n'})); //Read the line only when new line comes.
-parser.on('data', (temp) => { //Read data
-    console.log(temp);
-    var today = new Date();
-    io.sockets.emit('temp', {
-                            date: today.getDate()+
-                            "-"+today.getMonth()+1+
-                            "-"+today.getFullYear(),
-                             time: (today.getHours())+":"+(today.getMinutes()), temp:temp
-                            }); //emit the datd i.e. {date, time, temp} to all the connected clients.
+const parser = new parsers.Readline({
+    delimiter: '\r\n'
 });
 
-io.on('connection', (socket) => {
-    console.log("Someone connected."); //show a log as a new client connects.
-})
-*/
+var port = new SerialPort('COM3',{ 
+    baudRate: 115200,
+    dataBits: 8,
+
+});
+
+port.pipe(parser);
+
+var app = http.createServer(function(req, res) {
+    res.writeHead(200, {'Content-Type': 'text/html'});
+    res.end(index);
+});
+
+var io = require('./node_modules/socket.io').listen(app);
+
+io.on('connection', function(socket) {
+    
+    console.log('Node is listening to port');
+    
+});
+
+parser.on('data', function(data) {
+    
+    console.log(data);
+    
+    io.emit('data', data);
+    
+});
+
+app.listen(3000);

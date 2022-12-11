@@ -1,19 +1,12 @@
 {
-  "name": "frontend",
-  "version": "1.0.0",
-  "description": "Frontend for an Arduino IoT project",
-  "main": "app.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node app.js"
-  },
-  "author": "",
-  "license": "ISC",
+  "name": "basic-socket",
+  "version": "0.0.1",
+  "description": "Communication between Arduino and HTML/JavaScript",
   "dependencies": {
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "nodemon": "^2.0.20",
-    "serialport": "^10.5.0",
-    "socket.io": "^4.5.4"
+    "serialport": "^9.0.1",
+    "socket.io": "^2.5.0"
   }
 }

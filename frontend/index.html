@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Smart Home Temperature</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js'></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="outer">
+        <div class="inner">
+            <h1 class="top">Room Temp</h1>
+            <h2>
+                <script>
+                var socket = io();
+                socket.on('data', function(data) {   
+                    console.log(data);
+                    document.getElementById('sample').innerHTML = data; 
+                });
+                
+                </script>
+            </h2>
+            <input type="range" min="-30" max="70" value="20" class="slider" id="myRange">
+            <p class="sliderValue">Wanted Temp: <span id="demo"></span></p>
+            <p>
+                Note: If the room temperature exceeds wanted temperature by 5 C,
+                the site will alarm the user
+            </p>
+        </div>
+        <div class="inner">
+            <h1 class="mid">Outside Temp</h1>
+            <img src="" alt="" srcset="" id="weather-icon">
+            <div id="location">Unable to Fetch Weather</div>
+            <div class="desc">No Information Available.</div>
+            <div class="weather">
+                <div class="c">Error</div>
+                <div class="f">Error</div>
+            </div>
+            <div class="info">
+                <h4>Sunrise: <span class="sunrise">No Information Available</span></h4>
+                <h4>Sunset: <span class="sunset">No Information Available</span></h4>
+            </div>
+        </div>
+        <script src="scripts.js"></script>
+    </div>
+</body>
+
+</html>
