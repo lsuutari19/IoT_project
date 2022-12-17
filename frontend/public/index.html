@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html>
 
+<script
+src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
+</script>
+
 <head>
     <title>Smart Home Temperature</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -43,6 +47,7 @@
                 <h4>Sunrise: <span class="sunrise">No Information Available</span></h4>
                 <h4>Sunset: <span class="sunset">No Information Available</span></h4>
             </div>
+            <canvas id="tempChart" style="width:100%;max-width:512px; margin: 0 auto;"></canvas>
         </div>
         <script src="scripts.js"></script>
     </div>
