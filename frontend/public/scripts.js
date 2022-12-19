@@ -94,7 +94,12 @@ function updateData() {
       var today = new Date();
       var time = today.getHours() + ":" + today.getMinutes()
       outdoorTempValues.push(temp)
-      indoorTempValues.push(1) // TODO: push data from sensor
+      var socket = io();
+      socket.on('data', function(data) {   // Reading the data from the sensor
+          console.log(data);
+          document.getElementById('sample').innerHTML = data; 
+          indoorTempValues.push(data) // push data from sensor
+      });
       timeStampValues.push(time)
     });
 }
