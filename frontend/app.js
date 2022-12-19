@@ -1,6 +1,5 @@
 var express = require('express');
 require('dotenv').config()
-
 console.log(process.env.API_KEY);
 var SerialPort = require('serialport');
 const parsers = SerialPort.parsers;
@@ -35,11 +34,11 @@ io.on('connection', function(socket) {
 });
 
 parser.on('data', function(data) {
-    
-    console.log(data);
-    
-    io.emit('data', data);
-    
+    temp = String(data).split(","); //formatted the data so it only has the numbers of the temperature
+    temp = temp[1].split("").splice(2 - 1 , 4);
+    temp = Number(temp.join(""));
+    console.log(temp);
+    io.emit('data', temp);
 });
  //Bind socket.io to our express server.
 
