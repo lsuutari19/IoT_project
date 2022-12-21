@@ -98,7 +98,9 @@ function updateData() {
       socket.on('data', function(data) {   // Reading the data from the sensor
           console.log(data);
           document.getElementById('sample').innerHTML = data; 
-          indoorTempValues.push(data) // push data from sensor
+          data = data.split("").splice(1 - 1 , 4);  // getting rid of the °C
+          data = Number(data.join(""));
+          indoorTempValues.push(data) // Push data from sensor
       });
       timeStampValues.push(time)
     });
