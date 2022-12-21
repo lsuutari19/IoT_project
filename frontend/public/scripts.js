@@ -1,5 +1,5 @@
 // Openweathermap API. Do not share it publicly.
-const api = 'AAAA'; //Replace with your API
+const api = "8e5830007843e1890b12617e60963309"; //Replace with your API
 
 iconImg = document.getElementById("weather-icon");
 loc = document.querySelector("#location");
@@ -16,8 +16,38 @@ var outdoorTempValues = [];
 let long;
 let lat;
 
-window.addEventListener("load", () => {
+// setup the range slider and bubble
+const allRanges = document.querySelectorAll(".range-wrap");
+allRanges.forEach((wrap) => {
+  const range = wrap.querySelector(".range");
+  const bubble = wrap.querySelector(".bubble");
 
+  range.addEventListener("input", () => {
+    setBubble(range, bubble);
+  });
+  setBubble(range, bubble);
+});
+
+// sets the range bubble and functions as the alerter
+function setBubble(range, bubble) {
+  const val = range.value;
+  const min = range.min ? range.min : 0;
+  const max = range.max ? range.max : 100;
+  const newVal = Number(((val - min) * 100) / (max - min));
+  bubble.innerHTML = val;
+  bubble.style.left = `calc(${newVal}% + (${8 - newVal * 0.15}px))`;
+  console.log(val);
+  // check if the arduino data temperature is higher than the wanted temperature
+  socket.on("data", function (data) {
+    console.log(data);
+    if (data >= val) {
+      alert("Temperature is higher than wanted temperature!");
+    } else if (data <= val) {
+      alert("Temperature is lower than wanted temperature!");
+    }
+  });
+}
+window.addEventListener("load", () => {
   // Accesing Geolocation of User
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition((position) => {
@@ -27,38 +57,39 @@ window.addEventListener("load", () => {
 
       //Draw Line Chart
       const chart = new Chart("tempChart", {
-        type: 'line',
+        type: "line",
         data: {
           labels: timeStampValues,
-          datasets: [{
-            label: 'Outdoor temp',
-            borderColor: "rgba(0,0,255,1)",
-            data: outdoorTempValues,
-          //  lineTension: 0,
-            fill: false
-          },
-          {
-            label: 'Indoor temp',
-            borderColor: "rgba(255,0,0,1)",
-            data: indoorTempValues,
-         //   lineTension: 0,
-            fill: false
-          }
-        ]
+          datasets: [
+            {
+              label: "Outdoor temp",
+              borderColor: "rgba(0,0,255,1)",
+              data: outdoorTempValues,
+              //  lineTension: 0,
+              fill: false,
+            },
+            {
+              label: "Indoor temp",
+              borderColor: "rgba(255,0,0,1)",
+              data: indoorTempValues,
+              //   lineTension: 0,
+              fill: false,
+            },
+          ],
         },
       });
-      
-      updateData()
+
+      updateData();
 
       //Start updating the data at specific intervals
-      const interval = setInterval(function() {
-        updateData()
+      const interval = setInterval(function () {
+        updateData();
         chart.data.datasets[0].data = outdoorTempValues;
         chart.data.datasets[1].data = indoorTempValues;
         chart.update();
       }, updateInterval);
-  })}
-
+    });
+  }
 });
 
 function updateData() {
@@ -92,16 +123,17 @@ function updateData() {
 
       //Update Chart Data
       var today = new Date();
-      var time = today.getHours() + ":" + today.getMinutes()
-      outdoorTempValues.push(temp)
+      var time = today.getHours() + ":" + today.getMinutes();
+      outdoorTempValues.push(temp);
       var socket = io();
-      socket.on('data', function(data) {   // Reading the data from the sensor
-          console.log(data);
-          document.getElementById('sample').innerHTML = data; 
-          data = data.split("").splice(1 - 1 , 4);  // getting rid of the °C
-          data = Number(data.join(""));
-          indoorTempValues.push(data) // Push data from sensor
+      socket.on("data", function (data) {
+        // Reading the data from the sensor
+        console.log(data);
+        document.getElementById("sample").innerHTML = data;
+        data = data.split("").splice(1 - 1, 4); // getting rid of the °C
+        data = Number(data.join(""));
+        indoorTempValues.push(data); // Push data from sensor
       });
-      timeStampValues.push(time)
+      timeStampValues.push(time);
     });
 }

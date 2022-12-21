@@ -24,10 +24,13 @@ src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
                     document.getElementById('sample').innerHTML = data; 
                 });
                 </script>
-                <div id="sample"></div>
+                <div id="sample">ASD</div>
             </h2>
-            <input type="range" min="-30" max="70" value="20" class="slider" id="myRange">
-            <p class="sliderValue">Wanted Temp: <span id="demo"></span></p>
+            Wanter Room Temperature:
+            <div class="range-wrap">
+                <input type="range" class="range" min="-20" max="70">
+                <output class="bubble"></output>
+            </div>
             <p>
                 Note: If the room temperature exceeds wanted temperature by 5 C,
                 the site will alarm the user
@@ -46,7 +49,7 @@ src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
                 <h4>Sunrise: <span class="sunrise">No Information Available</span></h4>
                 <h4>Sunset: <span class="sunset">No Information Available</span></h4>
             </div>
-            <canvas id="tempChart" style="width:100%;max-width:512px; margin: 0 auto;"></canvas>
+            <canvas class ="canvas" id="tempChart" style="width:100%;max-width:512px; margin: 0 auto;"></canvas>
         </div>
         <script src="scripts.js"></script>
     </div>
