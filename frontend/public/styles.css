@@ -100,8 +100,8 @@ div.inner {
 .bubble::after {
   content: "";
   position: absolute;
-  width: 2px;
-  height: 2px;
+  width: 10px;
+  height: 10px;
   background: red;
   top: -1px;
   left: 50%;
@@ -109,4 +109,8 @@ div.inner {
 
 body {
   margin: 2rem;
+}
+
+.temperature {
+  font-size: 200%;
 }

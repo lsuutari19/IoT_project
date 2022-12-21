@@ -47,6 +47,7 @@ function setBubble(range, bubble) {
     }
   });
 }
+
 window.addEventListener("load", () => {
   // Accesing Geolocation of User
   if (navigator.geolocation) {
