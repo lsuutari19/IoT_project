@@ -36,16 +36,21 @@ function setBubble(range, bubble) {
   const newVal = Number(((val - min) * 100) / (max - min));
   bubble.innerHTML = val;
   bubble.style.left = `calc(${newVal}% + (${8 - newVal * 0.15}px))`;
-  console.log(val);
   // check if the arduino data temperature is higher than the wanted temperature
-  socket.on("data", function (data) {
-    console.log(data);
-    if (data >= val) {
-      alert("Temperature is higher than wanted temperature!");
-    } else if (data <= val) {
-      alert("Temperature is lower than wanted temperature!");
-    }
-  });
+}
+
+function tempAlert(msg, duration) {
+  var el = document.createElement("div");
+  el.classList.add("");
+  el.setAttribute(
+    "style",
+    "position:absolute;top:40%;left:20%;background-color:white;"
+  );
+  el.innerHTML = msg;
+  setTimeout(function () {
+    el.parentNode.removeChild(el);
+  }, duration);
+  document.body.appendChild(el);
 }
 
 window.addEventListener("load", () => {
@@ -96,6 +101,7 @@ window.addEventListener("load", () => {
 function updateData() {
   const base = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${long}&appid=${api}&units=metric`;
   // Using fetch to get data
+
   fetch(base)
     .then((response) => {
       return response.json();
@@ -134,7 +140,37 @@ function updateData() {
         data = data.split("").splice(1 - 1, 4); // getting rid of the °C
         data = Number(data.join(""));
         indoorTempValues.push(data); // Push data from sensor
+
+        const val = document.getElementById("bubble").value;
+        let height = 100;
+        let width =  500;
+        var left = (screen.width - width) / 2;
+        var top = (screen.height - height) / 2;
+      
+        console.log("data now: ", data, "wanted temp: ", parseFloat(val) + 5);
+        const flag = 0;
+        console.log("flag is: ", flag)
+        if (data >= val + 5) {
+          flag = 1;
+        } else if ( data <= val - 5) {
+          flag = 1;
+        }
+        if(flag===1) {
+          console.log("got here!");
+          setTimeout(function () {
+            console.log("asd");
+            var w = window.open( "", "WARNING!", 'resizable = yes, width=' + width + ', height=' + height + ', top='+ top + ', left=' + left);
+            w.document.write(
+              "WARNING! Temperature is not aligning with wanted temp!"
+            );
+            w.focus();
+            setTimeout(function () {
+              w.close();
+            }, 6000);
+          }, 1000);
+        }
       });
       timeStampValues.push(time);
     });
 }
+
