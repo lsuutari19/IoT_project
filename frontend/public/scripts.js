@@ -146,26 +146,30 @@ function updateData() {
         let width =  500;
         var left = (screen.width - width) / 2;
         var top = (screen.height - height) / 2;
-      
-        console.log("data now: ", data, "wanted temp: ", parseFloat(val) + 5);
-        const flag = 0;
-        console.log("flag is: ", flag)
-        if (data >= val + 5) {
+        // Check if temp too low or high
+        console.log("data now: ", data, "wanted temp: ", parseFloat(val));
+        let flag = 0;
+        if (data >= parseInt(val) + parseInt(5)) {  
           flag = 1;
-        } else if ( data <= val - 5) {
+        } if ( data <= parseInt(val) - 5) {
           flag = 1;
         }
+        console.log("flag is: ", flag)
         if(flag===1) {
           console.log("got here!");
           setTimeout(function () {
             console.log("asd");
+            if(flag===1) {
+              console.log("got here!");
+              document.body.style.backgroundColor = "red";
+            }
             var w = window.open( "", "WARNING!", 'resizable = yes, width=' + width + ', height=' + height + ', top='+ top + ', left=' + left);
             w.document.write(
               "WARNING! Temperature is not aligning with wanted temp!"
             );
             w.focus();
             setTimeout(function () {
-              w.close();
+              document.body.style.backgroundColor = "white";
             }, 6000);
           }, 1000);
         }
